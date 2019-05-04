@@ -23,6 +23,7 @@ document.querySelector('button').addEventListener('click', () => {
 
 function convert(inputValue, inputCurrency, outputCurrency) {
     return new Promise((resolve, reject) => {
+
         fetch(fixerUri).then(response => {
             if (response.status == 200) {
                 return response.json();
@@ -39,5 +40,11 @@ function convert(inputValue, inputCurrency, outputCurrency) {
     
             resolve(inputValue * rates[outputCurrency]);
         });
+
     });    
+}
+
+if ('serviceWorker' in navigator) {
+    navigator.serviceWorker.register('sw.js')
+        .catch(console.error);
 }

@@ -17,7 +17,7 @@ document.querySelector('button').addEventListener('click', () => {
 
     convert(inputValue, inputCurrency, outputCurrency)
         .then((outputValue) => {
-            document.querySelector('[name="output-value"]').value = outputValue;
+            document.querySelector('[name="output-value"]').value = (Math.round(outputValue * 100) / 100).toFixed(2);
         });
 });
 
@@ -42,9 +42,4 @@ function convert(inputValue, inputCurrency, outputCurrency) {
         });
 
     });    
-}
-
-if ('serviceWorker' in navigator) {
-    navigator.serviceWorker.register('sw.js')
-        .catch(console.error);
 }

@@ -1,5 +1,17 @@
-// const fixerUri = 'https://data.fixer.io/api/latest?base=EUR&symbols=USD,SEK,CHF&access_key=e6bb2848339b6f1b0365a6869117c0f3';
-const fixerUri = 'rates.json';
+// const fixerUri = 'https://data.fixer.io/api/latest?base=EUR&symbols=USD,SEK,CHF&access_key=API_KEY';
+const fixerUri = "fixer.json";
+
+async function convert(inputValue, inputCurrency, outputCurrency) {
+    const response = await fetch(fixerUri);
+    const data = await response.json();
+    const rates = data['rates'];
+    rates["EUR"] = 1.;
+    return inputValue / rates[inputCurrency] * rates[outputCurrency];
+}
+
+function round(value, decimals) {
+    return (Math.round(value * 100) / 100).toFixed(decimals);
+}
 
 document.querySelectorAll('select').forEach(element => {
     element.innerHTML = `
@@ -8,38 +20,12 @@ document.querySelectorAll('select').forEach(element => {
         <option value="CHF">CHF</option>
         <option value="SEK">SEK</option>
     `;
-});
+});    
 
-document.querySelector('button').addEventListener('click', () => {
-    const inputValue = document.querySelector('[name="input-value"]').value;
+document.querySelector('button').addEventListener('click', async () => {        
     const inputCurrency = document.querySelector('[name="input-currency"]').value;
-    const outputCurrency = document.querySelector('[name="output-currency"]').value;
-
-    convert(inputValue, inputCurrency, outputCurrency)
-        .then((outputValue) => {
-            document.querySelector('[name="output-value"]').value = (Math.round(outputValue * 100) / 100).toFixed(2);
-        });
+    const outputCurrency = document.querySelector('[name="output-currency"]').value;    
+    const inputValue = document.querySelector('[name="input-value"]').value;
+    const outputValue = await convert(inputValue, inputCurrency, outputCurrency);
+    document.querySelector('[name="output-value"]').value = round(outputValue);            
 });
-
-function convert(inputValue, inputCurrency, outputCurrency) {
-    return new Promise((resolve, reject) => {
-
-        fetch(fixerUri).then(response => {
-            if (response.status == 200) {
-                return response.json();
-            } else {
-                return Promise.reject('failed to download rates');
-            }
-        }).then((data) => {
-            let rates = data['rates'];
-            rates["EUR"] = 1;
-    
-            if (inputCurrency != "EUR") {
-                inputValue = inputValue / rates[inputCurrency];
-            }
-    
-            resolve(inputValue * rates[outputCurrency]);
-        });
-
-    });    
-}

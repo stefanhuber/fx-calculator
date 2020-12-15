@@ -7,6 +7,7 @@ self.addEventListener('install', (event) => {
                 'icon512.png',
                 'icon192.png',
                 'icon16.png',
+                'maskable-icon512.png',
                 'rates.json',
                 'manifest.webmanifest'
             ]))

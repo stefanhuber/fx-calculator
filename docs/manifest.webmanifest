@@ -2,7 +2,7 @@
     "name": "Fx Calculator",
     "short_name": "Fx Calc",
     "display": "standalone",
-    "start_url": "https://stefanhuber.github.io/fx-calculator/index.html",
+    "start_url": "/fx-calculator/index.html",
     "scope": "/",
     "background_color": "#cfc",
     "theme_color": "#cfc",
